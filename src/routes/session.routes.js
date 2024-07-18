@@ -15,7 +15,7 @@ router.get('/logout', logout);
 router.get('/current', async(req, res) => {
     try {
         const user = { ...req.session.user };
-        user.password = '.$';
+        delete user.password;
 
         res.status(200).send({
             user: user,

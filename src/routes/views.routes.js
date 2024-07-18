@@ -6,11 +6,8 @@ import ProductsManager from '../services/products.services.js';
 
 import { getCartByIdService } from '../services/carts.services.js';
 import { loginGet, login, logout, registerGet, registerPost } from '../controllers/users.controllers.js';
-import { verifyAuthoentication, verifyAuthorization } from '../middleware/auth.js';
+import { verifyAuthoentication, isAdmin, isUser } from '../middleware/auth.js';
 import passport from 'passport';
-
-
-
 
 const router = Router();
 
@@ -25,15 +22,16 @@ router.get('/', async (req, res) => {
 router.get('/products', async (req, res) => {
     // const products = await productsModel.find().lean();
     const  products  = await manager.newService(req.params.page);
-    return res.render('index',  {products: products , title: 'Index'} );
+    const user = req.session.user;
+    return res.render('index',  {products: products, user, title: 'Index'} );
 });  
 
-router.get('/products/:page',verifyAuthoentication,  verifyAuthorization, async (req, res) => {
+router.get('/products/:page',verifyAuthoentication,  isAdmin, async (req, res) => {
     const data = await manager.newService(config.PRODUCTS_PER_PAGE, req.params.page)
 return res.render('products', {title: 'Productos', data: data});
 });
 
-router.get('/realTime',verifyAuthoentication, async (req, res) => {
+router.get('/realTime',isAdmin, async (req, res) => {
     const products = await productsModel.find().lean();
     res.render('real', {products, title: 'Real Time'});
 });
@@ -43,7 +41,12 @@ router.get('/profile',verifyAuthoentication, async (req, res) => {
     res.render('profile', {user});
 });
 
-router.get('/cart/:cid',verifyAuthorization, async (req, res) => {
+router.get('/chat',verifyAuthoentication, isUser , async (req, res) => {
+    
+    res.render('chat');
+});
+
+router.get('/cart/:cid',isAdmin, async (req, res) => {
     const { cid } = req.params;
     const cart = await getCartByIdService(cid);
     res.render('cart', {title: 'Cart', cart});
@@ -63,6 +66,12 @@ router.get('/ghlogin', passport.authenticate('github',{failureRedirect:'/registe
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 router.get('/gologin', passport.authenticate('google',{failureRedirect:'/register'}), login)
 
+export default router;
+
+
+
+
+
 // router.post('/jwtlogin',passport.authenticate('login', { failureRedirect: `/login?error=${encodeURI('Usuario o clave no válidos')}`}), async (req, res) => {
 //     try {
 //         const token = createToken(req.user, '1h');
@@ -73,4 +82,3 @@ router.get('/gologin', passport.authenticate('google',{failureRedirect:'/registe
 //     }
 // });
 
-export default router;

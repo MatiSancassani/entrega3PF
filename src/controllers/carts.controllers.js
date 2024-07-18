@@ -1,6 +1,6 @@
 import { request, response } from 'express';
 import config from '../config.js';
-import { CartsRepository } from '../repository/index.js'
+import { CartsRepository, UsersRepository, ProductsRepository } from '../repository/index.js'
 
 export const getCartById = async (req = request, res= response) => {
     try {
@@ -15,20 +15,27 @@ export const getCartById = async (req = request, res= response) => {
     }
 };
 
-export const addCart = async (req = request, res= response) => {
-    try {
-        // const cart = await addCartService()
-        const cart = await CartsRepository.createCart();
-        res.status(200).send({ origin: config.SERVER, payload: cart });
-    } catch (err) {
-        console.log('addCart ->', err)
-        res.status(500).send({ origin: config.SERVER, payload: null, error: err.message });
-    }
-};
+// export const addCart = async (req = request, res= response) => {
+    // try {
+        // const cart = await addCartService() va comentada esta linea
+        // const cart = await CartsRepository.createCart();
+        // res.status(200).send({ origin: config.SERVER, payload: cart });
+    // } catch (err) {
+        // console.log('addCart ->', err)
+        // res.status(500).send({ origin: config.SERVER, payload: null, error: err.message });
+    // }
+// };
 
 export const addProductInCart = async (req = request, res= response) => {
     try {
+        const { _id } = req;
         const { cid, pid } = req.params;
+
+        const user = await UsersRepository.getUserById(_id);      
+        const product = await ProductsRepository.getProductById(pid)
+
+        if(!(user.cart_id.toString() === cid)) return res.status(400).send( {msg: 'Cart no valido'});
+        if(!product) return res.status(400).send( {msg: 'Product no existe'});
 
         // const cart = await addProductInCartService(cid, pid);
         const cart = await CartsRepository.addProductInCart(cid, pid);
@@ -48,8 +55,16 @@ export const addProductInCart = async (req = request, res= response) => {
 export const updateProductInCart = async (req = request, res= response) => {
     try {
 
+        const { _id } = req;
         const { cid, pid } = req.params;
         const { quantity } = req.body;
+
+        const user = await UsersRepository.getUserById(_id);      
+        const product = await ProductsRepository.getProductById(pid);
+        if(!(user.cart_id.toString() === cid)) return res.status(400).send( {msg: 'Cart no valido'});
+        if(!product) return res.status(400).send( {msg: 'Product no existe'});
+
+
         if (!quantity || !Number.isInteger(quantity)) {
             console.log('Debe ser un numero entero')
         }
@@ -64,7 +79,17 @@ export const updateProductInCart = async (req = request, res= response) => {
 
 export const deleteProductInCart = async (req = request, res= response) => {
     try {
+
+        const { _id } = req;
         const { cid, pid } = req.params;
+
+
+        const user = await UsersRepository.getUserById(_id);      
+        const product = await ProductsRepository.getProductById(pid);
+        if(!(user.cart_id.toString() === cid)) return res.status(400).send( {msg: 'Cart no valido'});
+        if(!product) return res.status(400).send( {msg: 'Product no existe'});
+
+        
         // const cart = await deleteProductInCartService(cid,pid);
         const cart = await CartsRepository.deleteProductInCart(cid, pid);
         

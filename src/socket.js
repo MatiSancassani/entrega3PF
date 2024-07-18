@@ -1,6 +1,6 @@
 import { Server } from "socket.io";
 import productModel from './dao/mongo/models/products.model.js';
-
+import messagesmodel from "./dao/mongo/models/messages.model.js";
 
 
 
@@ -18,8 +18,22 @@ const initSocket = (httpServer) => {
                 products.push(newProduct)
                 socket.emit('products', products);                  
             }
+        });
+
+        const messages = await messagesmodel.find();
+        socket.emit('message', messages);
+
+        socket.on('message', async (data) => {
+            const newMessage = await messagesmodel.create({...data});
+            if (newMessage) {
+                  const messages = await messagesmodel.find();
+                  io.emit('messageLogs', messages)              
+            }
         })
-    })
+
+        socket.broadcast.emit('newUser');
+    });
+
 }
 
 

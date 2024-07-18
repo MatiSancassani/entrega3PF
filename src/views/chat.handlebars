@@ -1,0 +1,28 @@
+ <style>
+    body {
+    background: rgb(15, 15, 46);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.container-fluid {
+    text-align: center;
+    color: #fff; 
+    padding: 1em;
+}
+</style>
+ 
+ <div>
+    <h1>Bienvenido al chat online</h1>
+ </div>
+
+ <div>
+    <p id="messageLogs"></p>
+    <input id="chatBox">
+ </div>
+
+
+ <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+ <script src="/socket.io/socket.io.js"></script>
+ <script src="/static/js/chat.js"></script>

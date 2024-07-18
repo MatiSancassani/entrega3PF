@@ -1,4 +1,4 @@
-import { mongoose } from "mongoose";
+import { mongoose, SchemaTypes} from "mongoose";
 
 mongoose.pluralize(null);
 
@@ -7,7 +7,7 @@ const collection = 'user';
 const usersSchema = new mongoose.Schema ({
     
     name: { type: String, required: [true, 'Name is required'] },
-    lastName: { type: String, required: [true, 'LastName is required']  },
+    lastName: { type: String},
     email: { type: String, required: [true, 'Email is required'], unique: true },
     password: { type: String, required: [true, 'Password is required'] },
     rol: { type: String,  default:'user', enum: ['user', 'premium', 'admin'] },
@@ -16,6 +16,10 @@ const usersSchema = new mongoose.Schema ({
     image: {type: String},  
     github: {type: Boolean, default: false},
     google: {type: Boolean, default: false},
+    cart_id: {
+        type: SchemaTypes.ObjectId,
+        ref: 'cart'
+    }
     
 });
 
