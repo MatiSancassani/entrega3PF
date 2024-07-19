@@ -1,4 +1,5 @@
 import cartModel from "./models/carts.model.js";
+import ticketModel from "./models/ticket.model.js";
 
 
 export const getCartById = async (cid) => 
@@ -41,3 +42,4 @@ export const deleteAllProducts = async (cid) =>
     await cartModel.findByIdAndUpdate(cid, {$set:{'products':[]}}, { new: true });
     //  await cartModel.findByIdAndDelete(cid); // Eliminariamos todo el carrito
 
+export const addTicket = async (ticket) => await ticketModel.create(ticket);
