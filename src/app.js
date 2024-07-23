@@ -6,8 +6,6 @@ import MongoStore from 'connect-mongo';
 import passport from 'passport';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-// import FileStore from 'session-file-store' Al usar almancenamiento en mongo desabilitamos, si queremos almacenar en archivo activamos
-
 import config from './config.js';
 import initSocket from './socket.js';
 import { initialPassport } from './config/passport.strategies.js';
@@ -16,6 +14,8 @@ import productsRoutes from './routes/products.routes.js'
 import cartsRouter from './routes/carts.routes.js';
 import viewsRouter from './routes/views.routes.js';
 import sessionRoutes from './routes/session.routes.js';
+import fakerRoutes from './routes/faker.routes.js'
+import errorsHandler from './services/errors/errors.handler.js';
 // import authRoutes from './routes/auth.routes.js'
 
 
@@ -81,8 +81,9 @@ const expressInstance = app.listen(config.PORT, async () => {
     app.use('/api/sessions', sessionRoutes);
     app.use('/api/products', productsRoutes);
     app.use('/api/carts', cartsRouter);
+    app.use('/', fakerRoutes)
     app.use('/static', express.static(`${config.DIRNAME}/public`));
-
+    app.use(errorsHandler);
     console.log(`Servidor activo en http://localhost:${config.PORT}`)
 });
 

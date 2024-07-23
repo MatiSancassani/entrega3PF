@@ -32,7 +32,7 @@ export const updateProductInCart = async (cid, pid, quantity) =>
             {_id: cid, 'products.id': pid },
             {$set: {'products.$.quantity' :quantity}},
             {new: true} 
-        );
+);
 
 export const deleteProductInCart = async (cid, pid) => 
     await cartModel.findByIdAndUpdate(cid, {$pull:{'products':{id:pid}}}, { new: true });

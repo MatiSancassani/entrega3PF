@@ -1,7 +1,7 @@
 import path from 'path';
 import dotenv from 'dotenv';
 
-dotenv.config({path:('../.env')});
+dotenv.config({path: '../.env' });
 
 const config = {
     PORT: 8080,
@@ -31,6 +31,20 @@ const config = {
     GMAIL_APP_USER:'matiassancassani@gmail.com',
     GMAIL_APP_PASS: process.env.GMAIL_APP_PASS,
 
+}
+
+
+
+export const errorsDictionary = {
+    UNHANDLED_ERROR: {code:0, status: 500, message: 'Error no identifcado'},
+    PRODUCTID_ERROR: {code: 1, status: 404, message: 'No se encuentra el producto'},
+    NEW_USER_ERROR: {code: 2, status: 400, message: 'Faltan parametros obligatorios'},
+    INVALID_FORMAT_PRODUCT: {code: 3, status: 400, message: 'No tiene un formato valido'},
+    CART_INVALID_PARAMETERS: {code: 4, status: 400, message: 'Parameters ivalidS'},
+    PAGE_NOT_FOUND: {code: 5, status: 404 , message: 'No se encuentra la pagina solicitada'},
+    DATABASE_ERROR: {code: 6, status: 500, message: 'No se pudo conectar a la DB'},
+    INTERNAL_ERROR: {code: 7, status: 500, message: 'Error interno del servidor'},
+    CREATION_ERROR: {code: 8, status: 500, message: 'Error al crear el registro'}
 }
 
 export default config;
