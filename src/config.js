@@ -41,7 +41,7 @@ export const errorsDictionary = {
     NEW_USER_ERROR: {code: 2, status: 400, message: 'Faltan parametros obligatorios'},
     INVALID_FORMAT_PRODUCT: {code: 3, status: 400, message: 'No tiene un formato valido'},
     CART_INVALID_PARAMETERS: {code: 4, status: 400, message: 'Parameters ivalidS'},
-    PAGE_NOT_FOUND: {code: 5, status: 404 , message: 'No se encuentra la pagina solicitada'},
+    USER_NOT_FOUND: {code: 5, status: 401, message: 'Debe crearse una cuenta para ver su contenido'},
     DATABASE_ERROR: {code: 6, status: 500, message: 'No se pudo conectar a la DB'},
     INTERNAL_ERROR: {code: 7, status: 500, message: 'Error interno del servidor'},
     CREATION_ERROR: {code: 8, status: 500, message: 'Error al crear el registro'}

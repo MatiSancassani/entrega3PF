@@ -1,11 +1,12 @@
 import { request, response } from "express";
-import config from "../config.js";
 import {validationResult} from 'express-validator';
 import jwt from 'jsonwebtoken';
+import config, { errorsDictionary } from "../config.js";
+import CustomError from "../services/errors/CustomError.class.js";
 
 export const verifyAuthoentication = (req = request, res = response, next) => {
 
-    if (!req.user) return res.status(401).send({ origin: config.SERVER, payload: 'Usuario no autenticado' });
+    if (!req.user) throw new CustomError(errorsDictionary.USER_NOT_FOUND)
 
     return next();
 }
